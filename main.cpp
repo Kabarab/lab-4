@@ -57,10 +57,12 @@ string vivod(long double number, int n) {
 
     return vivod_str;
 }
-long double Yx()
-{
+long double Yx (long double x){
+    long double ans=cos(x);
+    return ans;
 
 }
+
 
 long double Sx(long double x, int n)
 {
@@ -80,7 +82,7 @@ long double Sx(long double x, int n)
 
 long double Difference(long double x, int n) {
     long double s = Sx(x, n);
-    long double y = cos(x);
+    long double y = Yx(x);
     return fabs(s - y);
 }
 
