@@ -5,60 +5,23 @@
 
 using namespace std;
 
-
-
-double get_double_value()
+template <typename T>
+T get_value( const string& error_message)
 {
-    double value;
+    T value;
     while (!(cin >> value))
     {
-        cout << "Некорректное значение. Пожалуйста, введите число." << endl;
-        cout << "Введите значение снова: " << endl;
-
-        cin.clear();
-
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
-
-    }
-    cin.ignore(numeric_limits<streamsize>::max(), '\n');
-
-    return value;
-}
-int get_int_value()
-{
-    int value;
-    while (!(cin >> value))
-    {
-        cout << "Некорректное значение." << endl;
-        cout << "Значение должно быть целым числом." << endl;
-        cout << "Введите значение снова:" << endl;
-
+        cout << error_message << "\n";
+        cout << "Введите значение снова: ";
         cin.clear();
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
-
     }
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
-
     return value;
 }
 
-string vivod(long double number, int n) {
-    stringstream ss;
-    ss << setprecision(20) << number;
-    string vivod_str = ss.str();
-
-    if (vivod_str.length() >= n) {
-        return vivod_str.substr(0, n);
-    }
-
-    while (vivod_str.length() < n) {
-        vivod_str += ' ';
-    }
-
-    return vivod_str;
-}
 long double Yx (long double x){
-    long double ans=cos(x);
+    long double ans = cos(x);
     return ans;
 
 }
@@ -72,7 +35,7 @@ long double Sx(long double x, int n)
     long double sx = 1;
     long double term = 1;
 
-    for (int k = 1; k < n; ++k) {
+    for (int k = 1; k <= n; ++k) {
         term = term * (-1) * x * x / ((2 * k - 1) * (2 * k));
         sx += term;
     }
@@ -91,7 +54,7 @@ void Out_Rez(long double func(long double, int), long double a, long double b, l
     for (long double x = a; x <= b; x += h)
     {
         long double ans = func(x, n);
-        cout << "|     " << vivod(ans, 20) << "     |" << endl;
+        cout << "|" <<setw(15) << fixed << setprecision(15) << ans <<setw(15) << "|\n";
     }
 }
 
@@ -99,60 +62,52 @@ int main() {
     long double a, b, h, yx;
     int n, choice;
     cout << "Введите верхний предел n: ";
-    n = get_int_value();
+    n = get_value<int>("Значение должно быть целым числом\n");
     cout << "Введите начальное значение диапазона (a): ";
-    a = get_double_value();
+    a = get_value<long double>("Значение должно быть числом\n");
     cout << "Введите конечное значение диапазона (b): ";
-    b = get_double_value();
+    b = get_value<long double>("Значение должно быть числом\n");
     cout << "Введите шаг интервала (h): ";
-    h = get_double_value();
+    h = get_value<long double>("Значение должно быть числом\n");
 
     while (true) {
-        cout << "\n| 1-Вывести x | 2-Вывести S(x) | 3-Вывести Y(x) | 4-Вывести погрешность | 5-Завершить программу |" << endl
+        cout << "\n| 1-Вывести x | 2-Вывести S(x) | 3-Вывести Y(x) | 4-Вывести погрешность | 5-Завершить программу |\n"
              << "Ваш выбор: ";
-        choice = get_int_value();
+        choice = get_value<int>("Значение должно быть целым числом\n");
 
         switch (choice)
         {
         case 1:
-            cout << "--------------------------------" << endl
-                 << "|                x             |" << endl
-                 << "+------------------------------+" << endl;
+            cout << "| " << setw(15) << "x" << setw(15) <<" |\n";
             for (long double x = a; x <= b; x += h)
             {
-                cout << "|      " << vivod(x, 20) << "    |" << endl;
+                cout << "| " << setw(15) << fixed << setprecision(3) << x << setw(15) << " |\n";
             }
-            cout << "--------------------------------" << endl;
+            cout << "-------------------------------\n";
             break;
         case 2:
-            cout << "--------------------------------" << endl
-                 << "|               S(x)           |" << endl
-                 << "+------------------------------+" << endl;
+            cout << "| "<< setw(16) << "S(x)"<< setw(15) <<" |\n";
             Out_Rez(Sx, a, b, h, n);
-            cout << "--------------------------------" << endl;
+            cout << "--------------------------------\n";
             break;
         case 3:
-            cout << "--------------------------------" << endl
-                 << "|               Y(x)           |" << endl
-                 << "+------------------------------+" << endl;
+            cout << "| "<< setw(14) << "Y(x)" << setw(14) <<" |\n";
             for (long double x = a; x <= b; x += h)
             {
-                yx = cos(x);
-                cout << "|      " << vivod(yx, 20) << "    |" << endl;
+                yx = Yx(x);
+                cout << "| " << setw(14) << fixed << setprecision(5)<< yx << setw(15) << "| \n";
             }
-            cout << "--------------------------------" << endl;
+            cout << "-----------------------------\n";
             break;
         case 4:
-            cout << "--------------------------------" << endl
-                 << "|           |Y(x)-S(x)|        |" << endl
-                 << "+------------------------------+" << endl;
+            cout << "| "<< setw(15) <<" |Y(x)-S(x)| "<< setw(16) <<" |\n";
             Out_Rez(Difference, a, b, h, n);
-            cout << "--------------------------------" << endl;
+            cout << "--------------------------------\n";
             break;
         case 5:
             return 0;
         default:
-            cout << "Такого выбора не было, выберите снова!" << endl;
+            cout << "Такого выбора не было, выберите снова!\n";
             break;
         }
     }
